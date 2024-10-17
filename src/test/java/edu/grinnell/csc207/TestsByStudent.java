@@ -25,6 +25,35 @@ public class TestsByStudent {
    * @throws Exception
    */
   public void cloneEqualsTest() throws Exception {
+    // Build five equivalent matrices in different ways.
+    Matrix<String> matrix0 = new MatrixV0<String>(4, 3, "X");
+
+    Matrix<String> matrix1 = new MatrixV0<String>(3, 3, "X");
+    matrix1.insertCol(1);
+
+    Matrix<String> matrix2 = new MatrixV0<String>(4, 3);
+    matrix2.fillRegion(0, 0, 3, 4, "X");
+
+    Matrix<String> matrix3 = new MatrixV0<String>(4, 2, "X");
+    matrix3.insertRow(0, new String[] {"X", "X", "X", "X"});
+
+    Matrix<String> matrix4 = new MatrixV0<String>(5, 4, "X" + "");
+    matrix4.deleteRow(0);
+    matrix4.deleteCol(1);
+
+    if (matrix0.equals(matrix1) == false) {
+      fail("matrix 0 is not the same as matrix 1");
+    } // if
+    if (matrix1.equals(matrix2) == false) {
+      fail("matrix 1 is not the same as matrix 2");
+    } // if
+    if (matrix2.equals(matrix3) == false) {
+      fail("matrix 2 is not the same as matrix 3");
+    } // if
+    if (matrix3.equals(matrix4) == false) {
+      fail("matrix 3 is not the same as matrix 4");
+    } // if
+    
     // Build a matrix
     MatrixV0<String> testMatrix = new MatrixV0<String>(10, 10);
     // add a values to the matrix at position 5x5
@@ -164,7 +193,7 @@ public class TestsByStudent {
     } // try/catch
     // row above range
     try {
-      tMatrix.insertRow(5,new String[]{"a", "a", "a", "a", "a"});
+      tMatrix.insertRow(6,new String[]{"a", "a", "a", "a", "a"});
       fail("Row should have been out of range");
     } catch (Exception e) {
       // success condition
@@ -214,7 +243,7 @@ public class TestsByStudent {
     } // try/catch
     // column above range
     try {
-      tMatrix.insertCol(5,new String[]{"a", "a", "a", "a", "a"});
+      tMatrix.insertCol(6,new String[]{"a", "a", "a", "a", "a"});
       fail("Column should have been out of range");
     } catch (Exception e) {
       // success condition
@@ -284,12 +313,11 @@ public class TestsByStudent {
     } catch (Exception e) {
       // success condition
     } // try/catch
-    // make sure we can't insert a row at row 4
+    // make sure we can insert a row at row 4
     try {
       tMatrix.insertRow(4, new String[]{"a", "b", "c", "d", "e"});
-      fail("Matrix at row 4 should not exist");
     } catch (Exception e) {
-      // success condition
+      fail("Error re-inserting row 4");
     } // try/catch
   } // deleteRowTest()
 
@@ -334,12 +362,11 @@ public class TestsByStudent {
     } catch (Exception e) {
       // success condition
     } // try/catch
-    // make sure we can't insert a column at row 4
+    // make sure we can insert a column at row 4
     try {
       tMatrix.insertCol(4, new String[]{"a", "b", "c", "d", "e"});
-      fail("Matrix at column 4 should not exist");
     } catch (Exception e) {
-      // success condition
+      fail("Error re-inserting column 4");
     } // try/catch
   } // deleteColTest()
 
@@ -370,14 +397,74 @@ public class TestsByStudent {
     } // try/catch
     // ending row above range
     try {
-      tMatrix.fillRegion(1, 1, 10, 5, "a");
+      tMatrix.fillRegion(1, 1, 11, 5, "a");
       fail("row should have been out of range");
     } catch (Exception e) {
       // success condition
     } // try/catch
     // ending col above range
     try {
-      tMatrix.fillRegion(1, 1, 5, 10, "a");
+      tMatrix.fillRegion(1, 1, 5, 11, "a");
+      fail("col should have been out of range");
+    } catch (Exception e) {
+      // success condition
+    } // try/catch
+
+    // check if we can fill the region row (1-5) and col (1-5)
+    try {
+      tMatrix.fillRegion(1, 1, 5, 5, "a");
+    } catch (Exception e) {
+      fail("fill region not completed");
+    } // try/catch
+    // check if matrix rows were changed
+    for (int i = 1; i < 5; i++) {
+      for (int j = 1; j < 5; j++) {
+        try {
+          if (!(tMatrix.get(j,i).equals("a"))) {
+            fail("Unexpected value after filling region");
+          } // if
+        } catch (Exception e) {
+          fail("Error with output");
+        } // try/catch
+      } // for
+    } // for
+  } // fillRegionTest()
+
+  @Test
+  /**
+  * Check if we can fill a region.
+  *
+  * @throws Exception
+  */
+  public void fillLineTest() throws Exception {
+    // Build a matrix
+    MatrixV0<String> tMatrix = new MatrixV0<String>(10, 10);
+
+    // incorrect indexes should fail
+    // starting row below range
+    try {
+      tMatrix.fillRegion(-1, 1, 5, 5, "a");
+      fail("row should have been out of range");
+    } catch (Exception e) {
+      // success condition
+    } // try/catch
+    // starting column below range
+    try {
+    tMatrix.fillRegion(1, -1, 5, 5, "a");
+    fail("col should have been out of range");
+    } catch (Exception e) {
+      // success condition
+    } // try/catch
+    // ending row above range
+    try {
+      tMatrix.fillRegion(1, 1, 11, 5, "a");
+      fail("row should have been out of range");
+    } catch (Exception e) {
+      // success condition
+    } // try/catch
+    // ending col above range
+    try {
+      tMatrix.fillRegion(1, 1, 5, 11, "a");
       fail("col should have been out of range");
     } catch (Exception e) {
       // success condition
