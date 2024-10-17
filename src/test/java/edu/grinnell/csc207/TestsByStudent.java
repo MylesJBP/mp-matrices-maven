@@ -432,7 +432,7 @@ public class TestsByStudent {
 
   @Test
   /**
-  * Check if we can fill a region.
+  * Check if we can fill a line.
   *
   * @throws Exception
   */
@@ -443,50 +443,53 @@ public class TestsByStudent {
     // incorrect indexes should fail
     // starting row below range
     try {
-      tMatrix.fillRegion(-1, 1, 5, 5, "a");
+      tMatrix.fillLine(-1, 1, 1, 1, 5, 5, "a");
       fail("row should have been out of range");
     } catch (Exception e) {
       // success condition
     } // try/catch
     // starting column below range
     try {
-    tMatrix.fillRegion(1, -1, 5, 5, "a");
+      tMatrix.fillLine(1, -1, 1, 1, 5, 5, "a");
     fail("col should have been out of range");
     } catch (Exception e) {
       // success condition
     } // try/catch
     // ending row above range
     try {
-      tMatrix.fillRegion(1, 1, 11, 5, "a");
+      tMatrix.fillLine(1, 1, 1, 1, 11, 5, "a");
       fail("row should have been out of range");
     } catch (Exception e) {
       // success condition
     } // try/catch
     // ending col above range
     try {
-      tMatrix.fillRegion(1, 1, 5, 11, "a");
+      tMatrix.fillLine(1, 1, 1, 1, 5, 11, "a");
       fail("col should have been out of range");
     } catch (Exception e) {
       // success condition
     } // try/catch
 
-    // check if we can fill the region row (1-5) and col (1-5)
+    // create a frseh matrix
+    MatrixV0<String> tMatrix2 = new MatrixV0<String>(10, 10);
+
+    // check if we can fill the line from rows (1-5) and cols (1-5)
     try {
-      tMatrix.fillRegion(1, 1, 5, 5, "a");
+      tMatrix2.fillLine(1, 1, 1, 1, 5, 5, "a");
     } catch (Exception e) {
       fail("fill region not completed");
     } // try/catch
-    // check if matrix rows were changed
-    for (int i = 1; i < 5; i++) {
-      for (int j = 1; j < 5; j++) {
-        try {
-          if (!(tMatrix.get(j,i).equals("a"))) {
-            fail("Unexpected value after filling region");
-          } // if
-        } catch (Exception e) {
-          fail("Error with output");
-        } // try/catch
-      } // for
-    } // for
-  } // fillRegionTest()
+    // check if matrix was changed
+    int inc = 1;
+    int curRow = 1;
+    int curCol = 1;
+    while (curRow < 5 && curCol < 5) {
+      if (!(tMatrix2.get(curRow, curCol).equals("a"))) {
+        fail("Value in matrix not expected a");
+      }
+      curRow = 1 + (1 * inc);
+      curCol = 1 + (1 * inc);
+      inc += 1;
+    } // while
+  } // fillLineTest()
 } // TestsByStudent
